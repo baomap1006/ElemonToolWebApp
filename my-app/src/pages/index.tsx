@@ -1,11 +1,12 @@
 import type { NextPage } from "next";
-import prisma from "../db/client";
+import {prisma} from "../db/client";
 // import styles from "../styles/Home.module.css";
 import { trpc } from '../utils/trpc';
+import Input from './components/Input'
 
  const Home: NextPage = (props:any) => {
-  const hello = trpc.useQuery(['hello', { text: 'client' }]);
-  if (!hello.data) {
+  const {data,isLoading} = trpc.useQuery(['user.getAllUsers']);
+  if (isLoading||!data) {
     return <div>Loading...</div>;
   }
   return (
@@ -13,7 +14,8 @@ import { trpc } from '../utils/trpc';
       <div className={"p-6 flex flex-col"}>
         <div className="flex flex-col">
           <div className="text-3xl font-bold underline">Questions</div>
-          <p>{hello.data.greeting}</p>
+          <Input />
+          <p className="my-2">{JSON.stringify(data.info)}</p>
           <code>
           {
             props.users
