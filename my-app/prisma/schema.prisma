@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+datasource db {
+  provider = "mysql"
+  url = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Users {
+  id           String    @id @unique @default(cuid())
+  createdAt    DateTime? @default(now())
+  status       String?
+  ServiceStart DateTime?
+  ServiceEnd   DateTime?
+  wallet       String?
+  Accounts          Accounts[]
+}
+
+model Accounts {
+  id            String    @id @unique @default(cuid())
+  createdAt     DateTime? @default(now())
+  walletAddress String    @unique
+  session       String
+  accId         String    @unique
+  maxPower      Int?
+  status        String?
+  ownerId       String?
+  owner         Users     @relation(fields: [usersId], references: [id])
+  usersId       String
+  updatedAt DateTime? @updatedAt
+}
