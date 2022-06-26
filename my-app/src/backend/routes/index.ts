@@ -1,7 +1,3 @@
-import * as trpc from '@trpc/server';
-import * as trpcNext from '@trpc/server/adapters/next';
-import { z } from 'zod';
-import {prisma} from '../../db/client'
 import superjson from 'superjson'
 import { userRouter } from './Users';
 // import {accountsRouter} from './Accounts'

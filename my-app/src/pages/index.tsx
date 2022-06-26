@@ -5,22 +5,26 @@ import { trpc } from '../utils/trpc';
 import Input from './components/Input'
 
  const Home: NextPage = (props:any) => {
-  const {data,isLoading} = trpc.useQuery(['user.getAllUsers']);
+  const {data,isLoading} = trpc.useQuery(['user.getAllUsers'],{
+    refetchOnWindowFocus: false,
+  });
+  console.log(data)
   if (isLoading||!data) {
     return <div>Loading...</div>;
   }
   return (
     <div className={""}>
-      <div className={"p-6 flex flex-col"}>
-        <div className="flex flex-col">
-          <div className="text-3xl font-bold underline">Questions</div>
-          <Input />
-          <p className="my-2">{JSON.stringify(data.info)}</p>
-          <code>
+        <code>
           {
             props.users
           }
           </code>
+      <div className={"p-6 flex flex-col"}>
+        <div className="flex flex-col">
+          <div className="red">Questions</div>
+          <Input />
+         
+        
           
         </div>
 

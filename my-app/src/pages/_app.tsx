@@ -1,4 +1,4 @@
-import '../../styles/globals.css'
+import  '../../styles/base.css'
 import type { AppProps } from 'next/app'
 import { withTRPC } from '@trpc/next';
 import { AppType } from 'next/dist/shared/lib/utils';

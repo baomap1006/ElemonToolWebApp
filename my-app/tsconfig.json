@@ -14,11 +14,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
 
+    // Theo's Additional Opinions
     "incremental": false,
     "noUncheckedIndexedAccess": true
-
-
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","./src/**/*"],
   "exclude": ["node_modules"]
 }
