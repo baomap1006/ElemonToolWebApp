@@ -4,8 +4,8 @@ import {prisma} from '../../db/client'
 import { createRouter } from './context';
 import firebase from "firebase/compat/app";
 import * as trpc from '@trpc/server';
-
-
+import {MarketUsers} from '@prisma/client'
+import {Context } from '../../pages/api/trpc/[trpc]'
 let t = z.object({
     uid: z.string(),
     email: z.string(),
@@ -14,33 +14,51 @@ let t = z.object({
     status: z.boolean().default(false),
 })
 
-export const marketUserRouter = trpc.router().query(".getByID",{
+async function updateCooke(id:string,token:string){
+    await prisma.marketUsers.update({
+        where:{
+            id:id,
+        },
+        data:{
+            cookie:token
+        }})
+}
+
+export const marketUserRouter = trpc.router<Context>().query(".getByID",{
 // export const marketUserRouter = createRouter().query(".getByID",{
     input:t     ,
-    async resolve({ input }){
-        let info:any = []
+    async resolve({ input ,ctx}){
+        let info:MarketUsers|null =null
         try{
-            info = await prisma.marketUsers.findMany({
+            info = await prisma.marketUsers.upsert({
+                
                 where:{ 
                     uId:input.uid
-                }
-            })
-            if(info.length>0) return info;
-            
-            let createdData = await prisma.marketUsers.create({
-                data:{
+                },
+                update:{
+                    name:input.displayName
+                },
+                create:{
                     uId:input.uid,
                     name:input.displayName,
                     walletAddress:input.walletAddress,
                     status:input.status,
-                    email:input.email
+                    email:input.email,
+                    cookie:""
                 }
             })
-            return [createdData]
+            // check if authorized and need to update cookie
+            if(info.status==true && info.cookie!= ctx.token){
+                await updateCooke(info.id,ctx.token?ctx.token:"")            
+            }else if(info.status==false ){
+                console.log("Not authorize to update cookie")
+                if(info.cookie !=null || info.cookie!= "") await updateCooke(info.id,"")
+            }
+
         }catch(err){
             console.log(err)
         }
-        return info
+        return prisma.marketUsers.findUnique({where:{id:info!.id}});
         
         // console.log(ctx)
     }
@@ -76,4 +94,4 @@ export const marketUserRouter = trpc.router().query(".getByID",{
 
 
 // export type definition of API
-export type AppRouter = typeof maerketUserRouter;
+export type AppRouter = typeof marketUserRouter;

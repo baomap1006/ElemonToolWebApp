@@ -41,7 +41,8 @@ model MarketUsers{
   status Boolean @default(false)
   name String?
   uId String @unique
-  authCook         Cookies[]
+  cookie String
+  // authCook         Cookies[]
 }
 model Cookies{
   id String @id @unique @default(cuid())
@@ -52,6 +53,6 @@ model Cookies{
   updatedAt DateTime @updatedAt
   endAt DateTime?
   usersId String
-  owner MarketUsers     @relation(fields: [usersId], references: [id])
+  // owner MarketUsers     @relation(fields: [usersId], references: [id])
   
 }

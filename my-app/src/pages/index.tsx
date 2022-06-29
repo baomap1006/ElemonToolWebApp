@@ -9,16 +9,18 @@ import SignInScreen from "./components/Firebase/Auth";
 import Data from "./components/Data";
 import { MoralisProvider } from "react-moralis";
 
+
+
 const Home: NextPage = (props: any) => {
-  const context = useContext(AppContext);
+  const context = useContext(AppContext).user;
   let appId: string = process.env.NEXT_PUBLIC_MORALIS_APP_ID || "";
   let serverUrl: string = process.env.NEXT_PUBLIC_MORALIS_SERVERURL || "";
   return (
     <AppWrapper>
       <MoralisProvider serverUrl={serverUrl} appId={appId}>
         <SignInScreen>
-          <Header user={context.user!} />
-          {/* <Data /> */}
+          <Header  />
+          <Data  />
         </SignInScreen>
       </MoralisProvider>
       <ReactQueryDevtools />
