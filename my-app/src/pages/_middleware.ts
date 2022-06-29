@@ -1,13 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
 import { nanoid } from "nanoid";
+
+
 export function middleware(req:NextRequest){
-    console.log("Request",req.cookies)
+   
     
-    if(req.cookies["user-token"]) return ;
+    if(req.cookies["user-token"]){
+        console.log("Request token is",req.cookies["user-token"])
+       
+        return ;
+    } 
     
     const random = nanoid()
     const response = NextResponse.next();
-    response.cookie("user-token",random,{sameSite:"strict"})
+    let hours:number = 60*60*1000
+    response.cookie("user-token",random,{sameSite:"strict",maxAge:1*hours});
     response.cookie("hello", "world")
+    
     return response
 }

@@ -4,6 +4,7 @@ import firebase from "firebase/compat/app";
 import { uiConfig } from "./Firebase";
 import { trpc } from '../../../utils/trpc';
 import {AppContext} from '../../context/UserContext'
+import {prisma} from '../../../db/client'
 interface ChildProps {
   children?: React.ReactNode | React.ReactNode[]; 
 }
@@ -14,14 +15,19 @@ function SignInScreen({ children }: ChildProps) {
 
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {
-    const unregisterAuthObserver = firebase
+      const unregisterAuthObserver = firebase
       .auth()
-      .onAuthStateChanged((user) => {
-        let t: firebase.User = user!;
-        
+      .onAuthStateChanged(async (user) => {
+        let t: firebase.User = user!;        
         myContext.setuser(t)
         setIsSignedIn(!!user);
+       
       });
+    
+
+
+
+    
     return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
   }, []);
   if (!isSignedIn) {
