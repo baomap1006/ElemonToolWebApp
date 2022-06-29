@@ -1,46 +1,25 @@
 import type { NextPage } from "next";
-import {prisma} from "../db/client";
+import { useContext } from "react";
+import Header from './components/Header'
 // import styles from "../styles/Home.module.css";
-import { trpc } from '../utils/trpc';
-import Input from './components/Input'
+import { ReactQueryDevtools } from 'react-query/devtools'
+import { AppWrapper,AppContext } from './context/UserContext';
+import Input from "./components/Input";
+import SignInScreen from "./components/Firebase/Auth";
 
- const Home: NextPage = (props:any) => {
-  const {data,isLoading} = trpc.useQuery(['user.getAllUsers'],{
-    refetchOnWindowFocus: false,
-  });
-  console.log(data)
-  if (isLoading||!data) {
-    return <div>Loading...</div>;
-  }
+const Home: NextPage = (props: any) => {
+  const context = useContext(AppContext)
+  
   return (
-    <div className={""}>
-        <code>
-          {
-            props.users
-          }
-          </code>
-      <div className={"p-6 flex flex-col"}>
-        <div className="flex flex-col">
-          <div className="red">Questions</div>
-          <Input />
-         
-        
-          
-        </div>
+    <AppWrapper>
 
-
-      </div>
-    </div>
+   
+    <SignInScreen >
+       <Header user={context.user!} />
+    </SignInScreen>
+    <ReactQueryDevtools/>
+    </AppWrapper>
   );
 };
 
 export default Home;
-
-export const getServerSideProps = async ()=>{
-  const users = await prisma.users.findMany()
-  return{
-    props:{
-      users:JSON.stringify(users)
-    }
-  }
-}

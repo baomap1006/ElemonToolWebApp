@@ -1,11 +1,61 @@
+// import * as trpcNext from '@trpc/server/adapters/next';
+
+// import { appRouter } from '../../../backend/routes/index';
+// import { createContext } from '../../../backend/routes/context';
+
+
+// // export API handler
+// export default trpcNext.createNextApiHandler({
+//     router: appRouter,
+//     createContext: createContext,
+//   });
+
+
+// import * as trpcNext from '@trpc/server/adapters/next';
+// import { appRouter as a } from '../../../backend/routes/index';
+// export const appRouter =a;
+
+// // export type definition of API
+// export type AppRouter = typeof appRouter;
+
+// // export API handler
+// export default trpcNext.createNextApiHandler({
+//   router: appRouter,
+//   createContext: () => null,
+// });
+
+import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
-
-import { appRouter } from '../../../backend/routes/index';
-import { createContext } from '../../../backend/routes/context';
-
+import { z } from 'zod';
+import { userRouter } from '../../../backend/routes/Users';
+import {marketUserRouter} from '../../../backend/routes/MarketUsers'
+// import {appRouter  } from '../../../backend/routes/index'
+export const appRouter = trpc
+.router()
+.query('hello', {
+  input: z
+    .object({
+      text: z.string().nullish(),
+    })
+    .nullish(),
+  resolve({ input }) {
+    return {
+      greeting: `hello ${input?.text ?? 'world'}`,
+    };
+  },
+}).merge("marketUser",marketUserRouter).merge("user",userRouter)  ;
+// export type definition of API
+export type AppRouter = typeof appRouter;
 
 // export API handler
 export default trpcNext.createNextApiHandler({
-    router: appRouter,
-    createContext: createContext,
-  });
+  router: appRouter,
+  createContext: () => null,
+  onError({ error, type, path, input, ctx, req }){
+    console.log("data",{
+      input:input,
+      path:path
+    })
+    console.error('Error:', error);
+  }
+});

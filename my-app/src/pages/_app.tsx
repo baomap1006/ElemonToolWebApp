@@ -2,8 +2,9 @@ import  '../../styles/base.css'
 import type { AppProps } from 'next/app'
 import { withTRPC } from '@trpc/next';
 import { AppType } from 'next/dist/shared/lib/utils';
-import { AppRouter } from '../backend/routes/index';
+// import { AppRouter } from '../backend/routes/index';
 
+import { AppRouter } from './api/trpc/[trpc]';
 function MyApp<AppType>({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />
 }
@@ -29,6 +30,6 @@ export default withTRPC<AppRouter>({
   /**
    * @link https://trpc.io/docs/ssr
    */
-  ssr: true,
+  ssr: false,
 })(MyApp);
 

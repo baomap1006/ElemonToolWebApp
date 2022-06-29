@@ -39,6 +39,8 @@ model MarketUsers{
   createdAt DateTime @default(now())
   updatedAt DateTime? @updatedAt
   status Boolean @default(false)
+  name String?
+  uId String?
   authCook         Cookies[]
 }
 model Cookies{

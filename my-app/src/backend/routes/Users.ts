@@ -4,11 +4,14 @@ import { string, z } from 'zod';
 import {prisma} from '../../db/client'
 import superjson from 'superjson'
 import { createRouter } from './context';
-export const userRouter = createRouter()
+// export const userRouter = createRouter()
+export const userRouter = trpc.router()
 .query(".getAllUsers",{
     
+    // async resolve({ctx}){
     async resolve({ctx}){
-        console.log("testToken",ctx.token)
+        // ctx.token = 1;
+        // console.log("testToken",ctx.token)
         const info = await prisma.users.findMany();
         return {info,ctx}
     }
