@@ -5,10 +5,20 @@
 
 @layer base{
     min-w-4: 1rem;
+    min-w-400:400px;
 }
 
 @layer components{
     .btn { 
         @apply py-2 px-4 bg-indigo-500 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-opacity-75
+    }
+    .basic-color{
+       @apply bg-indigo-500 text-white text-left font-bold
+    }
+    .border-all{
+        @apply border-2 border-indigo-500
+    }
+    .table-cell{
+        @apply p-4 text-left   overflow-hidden text-ellipsis whitespace-nowrap w-60 inline-block
     }
 }

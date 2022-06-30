@@ -40,21 +40,40 @@ function Data({}: Props) {
   return (
     <div className="grid ">
       {/* <code>{JSON.stringify(elemons)}</code> */}
-      <div className="flex-col justify-center justify-items-center w-full">
-        {elemons?.length > 0 &&
-          elemons.map((elemon) => {
-            let txLink: string = `https://bscscan.com/tx/${elemon.transaction_hash}`;
-            return (
-              <div key={elemon.transaction_hash} className="flex gap-2">
-                <div>{elemon.tokenId}</div>
-                <div>{elemon.block_timestamp}</div>
-                <div>{elemon.from}</div>
-                <a href={txLink} rel="noreferrer" target="_blank">
-                  {elemon.transaction_hash}
-                </a>
-              </div>
-            );
-          })}
+      <div className="flex justify-center justify-items-center w-full">
+        <table className=" cursor-default border-collapse my-1 mx-0 min-w-400 border-all shadow-lg rounded-lg table-fixed overflow-auto  ">
+          {elemons.length > 0 && (
+            <th className="basic-color gap-2  w-full table-header-group" >
+              <tr className="basic-color gap-2  w-full table-row">
+                <th className="table-cell">Token ID</th>
+                <th className="table-cell">Block Time</th>
+                <th className="table-cell">Transfer from wallet</th>
+                <th className="table-cell"> Transaction Link</th>
+              </tr>
+            </th>
+          )}
+          {/* <div className ="table-row-group"> */}
+          <tbody className=" table-row-group text-ellipsis  " >
+            {elemons?.length > 0 &&
+              elemons.map((elemon) => {
+                let txLink: string = `https://bscscan.com/tx/${elemon.transaction_hash}`;
+                return (
+                  <tr key={elemon.transaction_hash} className="table-row gap-2 w-full hover:bg-indigo-400 odd:bg-white even: bg-slate-100" >
+                    <td className="table-cell">{elemon.tokenId}</td>
+                    <td className="table-cell">{elemon.block_timestamp}</td>
+                    <td className="table-cell">{elemon.from}</td>
+                    <td className="table-cell ">
+                      <a className=" overflow-hidden text-ellipsis whitespace-nowrap w-60 inline-block  " href={txLink} rel="noreferrer" target="_blank">
+                        {elemon.transaction_hash}
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+          {/* </div> */}
+         
+        </table>
       </div>
       {elemons?.length > 0 && (
         <div className="flex justify-center gap-4 w-full my-12">
@@ -68,8 +87,11 @@ function Data({}: Props) {
             Home
           </button>
           <button className="btn" onClick={() => navigate(-1)}>
-            Previos
+            Previous
           </button>
+          <p className="text-center items-center text-justify">
+            {`Page ${page}`}
+          </p>
           <button className="btn" onClick={() => navigate(1)}>
             {" "}
             Next
