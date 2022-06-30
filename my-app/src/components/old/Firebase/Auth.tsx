@@ -2,7 +2,7 @@ import React, { useState, useEffect,useContext } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebase from "firebase/compat/app";
 import { uiConfig } from "./Firebase";
-import {AppContext} from '../context/UserContext'
+import {AppContext} from '../../context/UserContext'
 interface ChildProps {
   children?: React.ReactNode | React.ReactNode[]; 
 }

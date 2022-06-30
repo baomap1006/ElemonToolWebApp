@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
-import {prisma} from "../../db/client";
+import {prisma} from "../../../db/client";
 // import styles from "../styles/Home.module.css";
-import { trpc } from '../../utils/trpc';
+import { trpc } from '../../../utils/trpc';
 // import Input from '../components/Input'
 
  const Home: NextPage = (props:any) => {
