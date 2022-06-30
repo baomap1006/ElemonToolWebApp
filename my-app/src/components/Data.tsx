@@ -1,7 +1,7 @@
 import axios from "axios";
 import Moralis from "moralis/types";
 import React, { useState, useEffect, useContext } from "react";
-import { AppContext } from "./context/UserContext";
+// import { AppContext } from "./context/UserContext";
 import { userProps, resType } from "./Types";
 
 type Props = {
@@ -10,12 +10,12 @@ type Props = {
 let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
 
 function Data({}: Props) {
-  const context = useContext(AppContext)!.user!;
+  // const context = useContext(AppContext)!.user!;
   const [elemons, setelemons] = useState<resType[]>([]);
 
   const [page, setpage] = useState<number>(1);
-  async function fetchInfo(uid: string, page:  number) {
-    let link = "/api/User/" + uid + "?page=" + page
+  async function fetchInfo(page: number) {
+    let link = "/api/elemons?page=" + page;
     let getAuth = await axios.get(link);
 
     let filtered = getAuth.data!.sort(
@@ -24,19 +24,18 @@ function Data({}: Props) {
     setelemons(filtered);
   }
   function navigate(dir = 1) {
-    fetchInfo(context.uid, page + dir);
+    fetchInfo(page + dir);
     setpage((prev) => prev + dir);
   }
   useEffect(() => {
     let cancel = false;
 
-    if (!cancel) fetchInfo(context.uid, 1);
+    if (!cancel) fetchInfo(1);
 
     return () => {
       cancel = true;
     };
   }, []);
-  if (!context) return <h1>No User Found!</h1>;
 
   return (
     <div className="grid ">
@@ -57,19 +56,26 @@ function Data({}: Props) {
             );
           })}
       </div>
-
-      <div className="flex justify-center gap-4 w-full my-12">
-        <button className="btn" onClick={() => {setpage(1);fetchInfo(context.uid,1)}}>
-          Home
-        </button>
-        <button className="btn" onClick={() => navigate(-1)}>
-          Previos
-        </button>
-        <button className="btn" onClick={() => navigate(1)}>
-          {" "}
-          Next
-        </button>
-      </div>
+      {elemons?.length > 0 && (
+        <div className="flex justify-center gap-4 w-full my-12">
+          <button
+            className="btn"
+            onClick={() => {
+              setpage(1);
+              fetchInfo(1);
+            }}
+          >
+            Home
+          </button>
+          <button className="btn" onClick={() => navigate(-1)}>
+            Previos
+          </button>
+          <button className="btn" onClick={() => navigate(1)}>
+            {" "}
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 }

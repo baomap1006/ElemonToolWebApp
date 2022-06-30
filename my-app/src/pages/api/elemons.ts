@@ -1,7 +1,8 @@
 import { useRouter } from "next/router";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "../../../db/client";
+import { prisma } from "../../db/client";
 import Moralis from "moralis/node";
+import { getSession, getCsrfToken } from "next-auth/react";
 /* Moralis init code */
 const serverUrl = process.env.NEXT_PUBLIC_MORALIS_SERVERURL;
 const appId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
@@ -52,35 +53,33 @@ export default async function handler(
 ) {
   console.log(req.query);
   const { uid, page } = req.query;
-  let qUID: string = getID(uid);
-  let t = await prisma.marketUsers.findUnique({
+  // let qUID: string = getID(uid);
+  const session = await getSession({ req });
+  let t = await prisma.user.findFirst({
     where: {
-      uId: qUID,
+      name: session?.user?.name,
+      email: session?.user?.email,
     },
   });
-  // console.log(t)
-  // console.log("page",getID(page))
-  // console.log("pageuid",uid)
 
-  if (req.cookies["user-token"] != t?.cookie) {
-    res.status(403).send({ cause: "not authorized" });
-    return;
-  }
+  console.log(t);
   if (!t) {
     res.status(403).send({ cause: "not found" });
     return;
   }
 
-  if (t.status == true) {
-    let returnPage: string | number = getID(page);
-    if (returnPage === "") returnPage = 1;
-    else {
-      returnPage = parseInt(returnPage, 10);
-    }
-    let elemons = await getElemons(returnPage);
-    return res.status(200).json(elemons);
+  if (t.PaymentStatus == false) {
+    res.status(403).send({ cause: "Not paid !" });
+    return;
   }
+  let returnPage: string | number = getID(page);
+  if (returnPage === "") returnPage = 1;
+  else {
+    returnPage = parseInt(returnPage, 10);
+  }
+  let elemons = await getElemons(returnPage);
 
-  // res.status(200).json(new Object(t));
-  // res.status(200).json({ name: 'John Doe' })
+  return res.status(200).json(elemons);
+
+
 }

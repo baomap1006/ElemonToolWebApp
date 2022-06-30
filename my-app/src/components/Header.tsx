@@ -21,14 +21,14 @@ function Header({}: Props) {
       walletAddress:  "",
       status: false,
   }
-    // const {data,isLoading,refetch} = trpc.useQuery(["marketUser.getByID",t],{
-    //     refetchOnWindowFocus: false,
-    //     onSuccess:async (res)=>{
-    //       console.log(res)
+    const {data,isLoading,refetch} = trpc.useQuery(["marketUser.getByID",t],{
+        refetchOnWindowFocus: false,
+        onSuccess:async (res)=>{
+          console.log(res)
           
           
-    //     }
-    //   });
+        }
+      });
     // console.log(context.user?.uid)
      
   return (

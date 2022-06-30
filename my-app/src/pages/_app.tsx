@@ -1,11 +1,18 @@
-import  '../../styles/base.css'
-import type { AppProps } from 'next/app'
-import { withTRPC } from '@trpc/next';
+import "../../styles/base.css";
+import type { AppProps } from "next/app";
+import { withTRPC } from "@trpc/next";
 // import { AppRouter } from '../backend/routes/index';
-
-import { AppRouter } from './api/trpc/[trpc]';
-function MyApp<AppType>({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+import { SessionProvider } from "next-auth/react";
+import { AppRouter } from "./api/trpc/[trpc]";
+function MyApp<AppType>({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
+  return (
+    <SessionProvider session={session}>
+      <Component {...pageProps} />
+    </SessionProvider>
+  );
 }
 
 export default withTRPC<AppRouter>({
@@ -14,9 +21,10 @@ export default withTRPC<AppRouter>({
      * If you want to use SSR, you need to use the server's full URL
      * @link https://trpc.io/docs/ssr
      */
-    const url = process.env.NEXT_PUBLIC_API
-      ? `https://${process.env.NEXT_PUBLIC_API}/api/trpc`
-      : 'http://localhost:3000/api/trpc';
+    const url = "/api/trpc";
+    // const url = process.env.NEXT_PUBLIC_API
+    //   ? `https://${process.env.NEXT_PUBLIC_API}/api/trpc`
+    //   : 'http://localhost:3000/api/trpc';
 
     return {
       url,
@@ -31,4 +39,3 @@ export default withTRPC<AppRouter>({
    */
   ssr: false,
 })(MyApp);
-

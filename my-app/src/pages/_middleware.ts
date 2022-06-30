@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse,NextFetchEvent } from "next/server";
 import { nanoid } from "nanoid";
 
 
-export function middleware(req:NextRequest){
+export function middleware(req: NextRequest, ev: NextFetchEvent) {
    
     
     if(req.cookies["user-token"]){
