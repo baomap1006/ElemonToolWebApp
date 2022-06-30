@@ -28,7 +28,7 @@ export const appRouter= trpc
 })  
 .transformer(superjson)
 .merge("user",userRouter)
-.merge("marketUser",marketUserRouter);
+// .merge("marketUser",marketUserRouter);
 
 // export type definition of API
 export type AppRouter = typeof appRouter;

@@ -1,13 +1,12 @@
 import React from "react";
 import firebase from "firebase/compat/app";
 import { useContext } from "react";
-import { AppContext } from '../context/UserContext';
-import { trpc } from '../../utils/trpc';
+import { AppContext } from './context/UserContext';
+import { trpc } from '../utils/trpc';
 // import {MarketUsers} from '@prisma/client'
-import {prisma} from '../../db/client'
 import { userProps } from "./Types";
 type Props = {
-    user:userProps
+    user?:userProps
 };
 
 // type marketUserType = MarketUsers
@@ -22,14 +21,14 @@ function Header({}: Props) {
       walletAddress:  "",
       status: false,
   }
-    const {data,isLoading,refetch} = trpc.useQuery(["marketUser.getByID",t],{
-        refetchOnWindowFocus: false,
-        onSuccess:async (res)=>{
-          console.log(res)
+    // const {data,isLoading,refetch} = trpc.useQuery(["marketUser.getByID",t],{
+    //     refetchOnWindowFocus: false,
+    //     onSuccess:async (res)=>{
+    //       console.log(res)
           
           
-        }
-      });
+    //     }
+    //   });
     // console.log(context.user?.uid)
      
   return (

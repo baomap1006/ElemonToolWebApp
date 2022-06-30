@@ -1,11 +1,11 @@
 import axios from "axios";
 import Moralis from "moralis/types";
 import React, { useState, useEffect, useContext } from "react";
-import { AppContext } from "../context/UserContext";
+import { AppContext } from "./context/UserContext";
 import { userProps, resType } from "./Types";
 
 type Props = {
-  user: userProps;
+  user?: userProps;
 };
 let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
 

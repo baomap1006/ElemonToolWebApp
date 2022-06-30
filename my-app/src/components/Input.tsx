@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from "react";
-import { trpc } from '../../utils/trpc';
+import { trpc } from '../utils/trpc';
 
 // type Props = {}
 

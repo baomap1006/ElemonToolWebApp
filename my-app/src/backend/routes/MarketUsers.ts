@@ -63,14 +63,14 @@ export const marketUserRouter = trpc.router<Context>().query(".getByID",{
         // console.log(ctx)
     }
 })
-// .query(".getAllUsers",{
+.query(".getAllUsers",{
     
-//     async resolve({ctx}){
-//         console.log("testToken",ctx.token)
-//         const info = await prisma.users.findMany();
-//         return {info,ctx}
-//     }
-// })
+    async resolve({ctx}){
+        console.log("testToken",ctx.token)
+        const info = await prisma.marketUsers.findMany();
+        return {info,ctx}
+    }
+})
 // .query(".getByWallet",{
 //     // input:z.object({})).nullish(),
 //     input:z.object({wallet:z.string().nullish()}),
