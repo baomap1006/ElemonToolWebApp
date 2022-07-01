@@ -18,14 +18,14 @@ function Table({elemons}: Props) {
    
   </colgroup>  
       {elemons.length > 0 && (
-        <th className="basic-color gap-2  w-full table-header-group" >
+        <thead className="basic-color gap-2  w-full table-header-group" >
           <tr className="basic-color gap-2  w-full table-row">
             <th className="table-cell">Token ID</th>
             <th className="table-cell">Block Time</th>
             <th className="table-cell">Elemon Info</th>
             <th className="table-cell"> Buy Link</th>
           </tr>
-        </th>
+        </thead>
       )}
       {/* <div className ="table-row-group"> */}
       <tbody className=" table-row-group text-ellipsis  " >

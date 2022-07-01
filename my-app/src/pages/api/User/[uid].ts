@@ -62,10 +62,10 @@ export default async function handler(
   // console.log("page",getID(page))
   // console.log("pageuid",uid)
 
-  if (req.cookies["user-token"] != t?.cookie) {
-    res.status(403).send({ cause: "not authorized" });
-    return;
-  }
+  // if (req.cookies["user-token"] != t?.cookie) {
+  //   res.status(403).send({ cause: "not authorized" });
+  //   return;
+  // }
   if (!t) {
     res.status(403).send({ cause: "not found" });
     return;

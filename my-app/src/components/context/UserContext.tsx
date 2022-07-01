@@ -1,10 +1,13 @@
 import { createContext, useContext,useState } from 'react';
 import firebase from "firebase/compat/app";
-
+import { User } from '@prisma/client';
+import { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import axios from "axios";
 
 
 const useValue = () => {
-    const [user, setuser] = useState<firebase.User>()
+    const [user, setuser] = useState()
 
     return {
         user,
@@ -23,12 +26,20 @@ interface ChildProps {
 
    
 export function AppWrapper({ children }:ChildProps) {
-   
-
+  const [user, setuser] = useState()
+  const { data: session } = useSession();
+  
+  useEffect(() => {
+    let cancel = false;
+    axios.get("/api/myUser").then(res=> setuser(res.data))
+    return () => {
+      cancel = true;
+    }
+  }, [session])
  
 
   return (
-    <AppContext.Provider value={useValue()}>
+    <AppContext.Provider value={{user, setuser}}>
       {children}
     </AppContext.Provider>
   );

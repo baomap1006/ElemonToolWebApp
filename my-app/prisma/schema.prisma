@@ -93,6 +93,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   PaymentStatus Boolean @default(false)
+  isAdmin Boolean @default(false)
 }
 
 model VerificationToken {

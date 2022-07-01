@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../db/client";
 import Moralis from "moralis/node";
-import { getSession, getCsrfToken } from "next-auth/react";
+import { getSession } from "next-auth/react";
 /* Moralis init code */
 const serverUrl = process.env.NEXT_PUBLIC_MORALIS_SERVERURL;
 const appId = process.env.NEXT_PUBLIC_MORALIS_APP_ID;
