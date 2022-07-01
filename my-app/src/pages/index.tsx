@@ -1,33 +1,26 @@
 import type { NextPage } from "next";
-// import { useContext } from "react";
-import Header from "../components/Header";
-// import styles from "../styles/Home.module.css";
+import { useSession } from "next-auth/react";
 import { ReactQueryDevtools } from "react-query/devtools";
-// import { AppWrapper, AppContext } from "../components/context/UserContext";
-// import SignInScreen from "../components/Firebase/Auth";
-import Data from "../components/Data";
+
+import Data from "../components/Data/Data";
 import { MoralisProvider } from "react-moralis";
 
-import NewSignIn from '../components/NewSignIn'
-
+import NotSignIn from "../components/NotSignIn";
+import MainItems from "../components/MainItems";
 const Home: NextPage = (props: any) => {
-  // const context = useContext(AppContext).user;
+  const { data: session, status } = useSession();
   let appId: string = process.env.NEXT_PUBLIC_MORALIS_APP_ID || "";
   let serverUrl: string = process.env.NEXT_PUBLIC_MORALIS_SERVERURL || "";
   return (
     // <AppWrapper>
-      <MoralisProvider serverUrl={serverUrl} appId={appId}>
-        {/* <SignInScreen>
-          <Header  />
-          <Data  />
-        </SignInScreen> */}
-         {/* <Header  /> */}
-         <NewSignIn />
-          <Data  />
-          
-          <ReactQueryDevtools />
-      </MoralisProvider>
-    
+    <MoralisProvider serverUrl={serverUrl} appId={appId}>
+      {status==="loading" && <div>Loading...</div>}
+      {session && <MainItems />}
+      {!session && <NotSignIn/>}     
+
+      <ReactQueryDevtools />
+    </MoralisProvider>
+
     // </AppWrapper>
   );
 };

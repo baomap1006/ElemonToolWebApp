@@ -55,19 +55,23 @@ export default async function handler(
   const { uid, page } = req.query;
   // let qUID: string = getID(uid);
   const session = await getSession({ req });
-  let t = await prisma.user.findFirst({
+  if(!session || !session.user ) {
+    res.status(403).send({ cause: "Not allowed" });
+    return;
+  }
+  let temp = await prisma.user.findMany({
     where: {
       name: session?.user?.name,
       email: session?.user?.email,
     },
   });
-
-  console.log(t);
-  if (!t) {
+ 
+  console.log(temp);
+  if (temp.length===0) {
     res.status(403).send({ cause: "not found" });
     return;
   }
-
+  let t = temp[0]!;
   if (t.PaymentStatus == false) {
     res.status(403).send({ cause: "Not paid !" });
     return;
