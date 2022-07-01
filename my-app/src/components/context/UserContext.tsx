@@ -7,7 +7,7 @@ import axios from "axios";
 
 
 const useValue = () => {
-    const [user, setuser] = useState()
+    const [user, setuser] = useState<User>()
 
     return {
         user,
@@ -26,7 +26,7 @@ interface ChildProps {
 
    
 export function AppWrapper({ children }:ChildProps) {
-  const [user, setuser] = useState()
+  const [user, setuser] = useState<User>()
   const { data: session } = useSession();
   
   useEffect(() => {

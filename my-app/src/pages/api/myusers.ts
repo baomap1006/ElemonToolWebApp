@@ -2,10 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "../../db/client";
 import { getSession } from "next-auth/react";
 import axios from "axios"
-// type Data = {
-//   [key: string]: string;
-// };
-type Data = boolean
+import { User } from "@prisma/client";
+type Data = User[]
+// type Data = boolean
 type errorRes = {
   cause: string;
 };

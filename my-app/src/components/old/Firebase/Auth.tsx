@@ -17,7 +17,7 @@ function SignInScreen({ children }: ChildProps) {
       .auth()
       .onAuthStateChanged(async (user) => {
         let t: firebase.User = user!;        
-        myContext.setuser(t)
+        // myContext.setuser(t)
         setIsSignedIn(!!user);
        
       });
