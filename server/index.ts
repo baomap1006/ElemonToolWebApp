@@ -1,25 +1,28 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import express, { Express, Request, Response } from 'express';
-
+const { instrument } = require("@socket.io/admin-ui");
 
 const cors = require('cors');
 const app = express();
-app.use(cors({origin:'*'}))
+app.use(cors({origin:"*"}))
 app.use(express.json());
 
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, { /* options */ 
-
 cors: {
-    origin: "*"
+    origin:"*"
   }
 });
 
-app.get('/newRecord',(req:Request,res:Response)=>{
-  res.send("Hello !")
-    io.emit("received-clicked","newRecord")
+app.get('/api/newitem',(req:Request,res:Response)=>{
+    console.log("new request on /newrecord ")
+    let body = req.body;
+    if(!body) return;
+    let newrecord = body;
+	  res.send("Hello !")
+	  io.emit("received-item",newrecord)
 })
 
 app.get('/',(req:Request,res:Response)=>{
@@ -27,7 +30,7 @@ app.get('/',(req:Request,res:Response)=>{
     res.send("Hello !")
     io.emit("received-clicked","received clicked event 2")
 })
-
+ 
 
 io.on("connection", (socket) => {
     // ...
@@ -49,6 +52,10 @@ io.on("connection", (socket) => {
       });
   });
   
+  instrument(io, {
+    auth: false
+  });
 
+  let port = 8080;
+httpServer.listen(port,()=>{console.log("listening to port",port)});
 
-  httpServer.listen(3001,()=>{console.log("listening to port 3001")});
