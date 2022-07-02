@@ -82,7 +82,7 @@ export function AppWrapper({ children }: ChildProps) {
   useEffect(() => {
     let cancel = false;
     if (!cancel && status === "authenticated") {
-      const socket = io(link);
+      const socket = io("https://ElemonWS.baotran17.repl.co");
       setioSocket(socket);
       socket.on("connect", () => {
         console.log(socket.id, " connected to the server !");
