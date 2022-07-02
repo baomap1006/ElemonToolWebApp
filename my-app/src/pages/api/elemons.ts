@@ -24,7 +24,7 @@ function getID(uid: string | string[] | undefined) {
   }
 }
 
-async function getElemons(page = 1) {
+export async function getElemons(page = 1) {
   let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
   let pageSize: number = 20;
   let toskip: number = (page - 1) * pageSize;

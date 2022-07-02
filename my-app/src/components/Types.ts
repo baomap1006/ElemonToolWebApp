@@ -1,6 +1,7 @@
 import firebase from "firebase/compat/app";
 
 export type userProps = firebase.User;
+import { z, ZodError } from "zod";
 
 export const MoralisTestObject = {
   log_index: 366,
@@ -29,6 +30,45 @@ export const MoralisTestObject = {
   transaction_index: 143,
   objectId: "sycFfRL5HuLCzoxhM8ali6kc",
 };
+
+export const MoralisOutput = z.object({
+  log_index: z.number(),
+  transaction_hash: z.string(),
+  createdAt: z.string().nullable().optional(),
+  updatedAt: z.string().nullable(),
+  address: z.string(),
+  block_hash: z.string(),
+  block_number: z.number(),
+  block_timestamp: z.object({
+    __type: z.string(),
+    iso: z.string(),
+  }),
+  confirmed: z.boolean(),
+  from: z.string(),
+  to: z.string(),
+  tokenId: z.string() || z.number(),
+  tokenId_decimal: z.object({
+    __type: z.string(),
+    value: z.string(),
+  }),
+  transaction_index: z.number(),
+  objectId: z.string(),
+});
+
+export function savedata(rawData:any){
+  try{
+    let data = MoralisOutput.parse(rawData);
+    return {success:true,data:data}
+  }catch(e){
+    if(e instanceof ZodError){
+      return {success:false,errors:e.flatten()}
+    }else{
+      console.log(e)
+      return {success:false,errors:"Cannot parse info !"}
+    }
+  }
+}
+
 
 export const elemonTest = {
   data: {
@@ -91,9 +131,9 @@ export const elemonTest = {
 };
 export type defaultResponse = typeof elemonTest;
 export type elemonType = typeof elemonTest.data.data[0];
-export type elemmonInfoType = typeof elemonTest.data.info
+export type elemmonInfoType = typeof elemonTest.data.info;
 export type MoralisObjectType = typeof MoralisTestObject;
 export interface resType extends MoralisObjectType {
-  elemon: elemonType | null,
+  elemon: elemonType | null;
   elemmonInfo: elemmonInfoType | null;
 }

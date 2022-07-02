@@ -15,7 +15,7 @@ function MainItems(props:any) {
         <SignIn />
       </div>
       <div className="Right-items  h-screen">
-        {/* <Data /> */}
+        <Data />
         {/* <button onClick={()=>{
           console.log("clicked")
           mySocket.emit("clicked",{data:'wth'})

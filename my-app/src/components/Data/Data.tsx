@@ -8,12 +8,12 @@ import {AppContext} from '../context/UserContext'
 type Props = {
   user?: userProps;
 };
-let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
+// let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
 
 async function getElemon(res:resType,setelemons:React.Dispatch<React.SetStateAction<resType[]>>) {
   res.elemon=null;
   let tempRes = await axios.get("https://app-api.elemon.io/elemon/info/"+res.tokenId).catch(err=>{
-    console.log(err)
+    // console.log(err)
   })
   // console.log(tempRes?.data)
   if(!tempRes ||!tempRes.data || tempRes.status!==200 ){
@@ -36,12 +36,22 @@ async function getElemon(res:resType,setelemons:React.Dispatch<React.SetStateAct
 
 function Data({}: Props) {
   const context = useContext(AppContext)
-  const mySocket = context.ioSocket!
-  mySocket.on("received-item",(context)=>{
-    console.log("received event")
-    console.log(context)
-    fetchInfo(page)
-  })
+  const isFetch = context.isFetch!
+  const el = context.tempElemon
+  useEffect(() => {
+    let cancel = false
+    
+    if(!cancel){
+      // fetchInfo(page)
+      // console.log("triggered",el)
+      setelemons(prev=>[el!,...prev])
+    }
+  
+    return () => {
+     cancel=true;
+    }
+  }, [el])
+  
   const [elemons, setelemons] = useState<resType[]>([]);
   // console.log(elemonType)
   const [page, setpage] = useState<number>(1);
@@ -49,7 +59,10 @@ function Data({}: Props) {
     setelemons([])
     let link = "/api/elemons?page=" + page;
     let getAuth = await axios.get(link);
-    if(!getAuth || !getAuth.data || getAuth.status!=200) return;
+    if(!getAuth || !getAuth.data || getAuth.status!=200){
+      alert("Not authorized")
+      return;
+    } ;
     let newRespsonse:resType[] =[]
     await (async ()=>{
       for(let item of getAuth.data){
