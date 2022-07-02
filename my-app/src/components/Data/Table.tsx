@@ -16,7 +16,7 @@ type Props = {
 function Table({ elemons }: Props) {
   return (
     <div className="flex justify-center justify-items-center w-full">
-      <table className=" cursor-default border-collapse my-1 mx-0 min-w-400 border-all shadow-lg rounded-lg table-fixed overflow-auto  ">
+      <table className=" cursor-default border-collapse my-1 mx-0 min-w-400 border-all shadow-lg rounded-lg overflow-auto  ">
         <colgroup>
           <col style={{ width: "10%" }} />
           <col style={{ width: "10%" }} />
@@ -24,8 +24,8 @@ function Table({ elemons }: Props) {
           <col style={{ width: "20%" }} />
         </colgroup>
         {elemons.length > 0 && (
-          <thead className="basic-color gap-2  w-full table-header-group">
-            <tr className="basic-color gap-2  w-full table-row">
+          <thead className="basic-color gap-2  w-full ">
+            <tr className="basic-color gap-2  w-full ">
               <th className="table-cell">Token ID</th>
               <th className="table-cell">Block Time</th>
               <th className="table-cell">Elemon Info</th>
@@ -34,7 +34,7 @@ function Table({ elemons }: Props) {
           </thead>
         )}
         {/* <div className ="table-row-group"> */}
-        <tbody className=" table-row-group text-ellipsis  ">
+        <tbody className=" text-ellipsis max-h-20 ">
           {elemons?.length > 0 &&
             elemons.map((elemon) => {
               let txLink: string = `https://app.elemon.io/marketplace/elemon-detail/${elemon.tokenId}`;
@@ -70,7 +70,7 @@ function Table({ elemons }: Props) {
 }
 
 function Item({ children }: { children: React.ReactNode }) {
-  return <div className="grid  gap-4 grid-cols-3">{children}</div>;
+  return <div className="xl:grid grid-cols-3 flex gap-4 justify-start flex-wrap">{children}</div>;
 }
 
 function Comp({ title, value }: { [key: string]: string | number | null }) {

@@ -1,5 +1,5 @@
 export function timeSince(date:string) {
-    let startTime=new Date(date.toString()).getTime()
+    let startTime=new Date(date).getTime()
     let end = new Date().getTime();
     var seconds = Math.floor(( end- startTime) / 1000);
   

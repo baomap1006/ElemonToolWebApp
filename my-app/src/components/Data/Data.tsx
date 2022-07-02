@@ -10,7 +10,17 @@ type Props = {
 };
 // let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
 
-async function getElemon(res:resType,setelemons:React.Dispatch<React.SetStateAction<resType[]>>) {
+
+type getElProps = {
+  res:resType,
+  setelemons:React.Dispatch<React.SetStateAction<resType[]>> 
+}
+
+
+async function getElemon(props:getElProps) {
+  let res=props.res;
+  let setelemons=props.setelemons;
+  
   res.elemon=null;
   let tempRes = await axios.get("https://app-api.elemon.io/elemon/info/"+res.tokenId).catch(err=>{
     // console.log(err)
@@ -18,17 +28,21 @@ async function getElemon(res:resType,setelemons:React.Dispatch<React.SetStateAct
   // console.log(tempRes?.data)
   if(!tempRes ||!tempRes.data || tempRes.status!==200 ){
     setelemons(prev => [...prev,res]);
+   
+    // els[res.tokenId] = res;
     return
   } 
   let el:defaultResponse = tempRes.data
   if(!el || !el?.data.data.length ){
     setelemons(prev => [...prev,res]);
+   
     return
   } 
   let elemon:(typeof elemonTest.data) = el.data!
   res = {...res,elemon:elemon.data[0]!,elemmonInfo:elemon.info} 
 
   setelemons(prev => [...prev,res]);
+
   return
   
 }
@@ -36,23 +50,27 @@ async function getElemon(res:resType,setelemons:React.Dispatch<React.SetStateAct
 
 function Data({}: Props) {
   const context = useContext(AppContext)
-  const isFetch = context.isFetch!
-  const el = context.tempElemon
-  useEffect(() => {
-    let cancel = false
+
+  // useEffect(() => {
+  //   let cancel = false
     
-    if(!cancel){
-      // fetchInfo(page)
-      // console.log("triggered",el)
-      setelemons(prev=>[el!,...prev])
-    }
+  //   if(!cancel){
+  //     // fetchInfo(page)
+  //     console.log("triggered",el)
+  //     setelemons(prev=>[el!,...prev])
+  //     if(el && el.tokenId && !els[el.tokenId]){
+  //       fetchInfo(page)
+  //     }
+  //     // fetchInfo(page)
+  //     console.log(els)
+  //   }
   
-    return () => {
-     cancel=true;
-    }
-  }, [el])
+  //   // return () => {
+  //   //  cancel=true;
+  //   // }
+  // }, [isFetch])
   
-  const [elemons, setelemons] = useState<resType[]>([]);
+  const [elemons, setelemons] = [context.elemons,context.setelemons];
   // console.log(elemonType)
   const [page, setpage] = useState<number>(1);
   async function fetchInfo(page: number) {
@@ -66,7 +84,7 @@ function Data({}: Props) {
     let newRespsonse:resType[] =[]
     await (async ()=>{
       for(let item of getAuth.data){
-        await getElemon(item,setelemons);
+        await getElemon({res:item,setelemons});
       }
     })()
     // let filtered = elemons!.sort(
@@ -82,18 +100,22 @@ function Data({}: Props) {
   useEffect(() => {
     let cancel = false;
 
-    if (!cancel) fetchInfo(1);
+    if (!cancel){
+      fetchInfo(1)
+    }
 
     return () => {
       cancel = true;
     };
   }, []);
 
+ 
+  
 
   if(elemons.length===0) return <div></div>
   return (
     <div className="grid ">
-  
+        <audio src="mixkit-confirmation-tone-2867.wav" id="audio" controls style={{display:'none'}}></audio>
         <Buttons page={page} setpage={setpage} navigate={navigate} fetchInfo={fetchInfo}/>
         <Table elemons={elemons}/>
     
