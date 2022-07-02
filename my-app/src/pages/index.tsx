@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useSession } from "next-auth/react";
-import { ReactQueryDevtools } from "react-query/devtools";
+// import { ReactQueryDevtools } from "react-query/devtools";
 import { AppWrapper } from "../components/context/UserContext";
 import Data from "../components/Data/Data";
 import { MoralisProvider } from "react-moralis";
@@ -19,7 +19,7 @@ const Home: NextPage = (props: any) => {
       {session && <MainItems />}
       {!session && <NotSignIn/>}     
 
-      <ReactQueryDevtools />
+      {/* <ReactQueryDevtools /> */}
     </MoralisProvider>
 
     </AppWrapper>

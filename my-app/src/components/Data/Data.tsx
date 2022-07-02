@@ -4,7 +4,7 @@ import React, { useState, useEffect, useContext } from "react";
 import Buttons from "./Buttons";
 import { userProps, resType ,elemonType,defaultResponse,elemmonInfoType,elemonTest} from "../Types";
 import Table from "./Table";
-
+import {AppContext} from '../context/UserContext'
 type Props = {
   user?: userProps;
 };
@@ -35,7 +35,13 @@ async function getElemon(res:resType,setelemons:React.Dispatch<React.SetStateAct
 
 
 function Data({}: Props) {
-  // const context = useContext(AppContext)!.user!;
+  const context = useContext(AppContext)
+  const mySocket = context.ioSocket!
+  mySocket.on("received-item",(context)=>{
+    console.log("received event")
+    console.log(context)
+    fetchInfo(page)
+  })
   const [elemons, setelemons] = useState<resType[]>([]);
   // console.log(elemonType)
   const [page, setpage] = useState<number>(1);
@@ -69,6 +75,8 @@ function Data({}: Props) {
       cancel = true;
     };
   }, []);
+
+
   if(elemons.length===0) return <div></div>
   return (
     <div className="grid ">
