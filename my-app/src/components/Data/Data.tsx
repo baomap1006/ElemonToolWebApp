@@ -1,107 +1,59 @@
 import axios from "axios";
-import Moralis from "moralis/types";
 import React, { useState, useEffect, useContext } from "react";
 import Buttons from "./Buttons";
-import { userProps, resType ,elemonType,defaultResponse,elemmonInfoType,elemonTest} from "../Types";
+import {
+  userProps,
+  resType,
+  elemonType,
+  defaultResponse,
+  elemmonInfoType,
+  elemonTest,
+  savedata,
+} from "../Types";
 import Table from "./Table";
-import {AppContext} from '../context/UserContext'
+import { AppContext } from "../context/UserContext";
+import { useMoralisSubscription } from "react-moralis";
+import { getElemon } from "./Functions";
+
 type Props = {
   user?: userProps;
 };
-// let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
-
-
-type getElProps = {
-  res:resType,
-  setelemons:React.Dispatch<React.SetStateAction<resType[]>> 
-}
-
-
-async function getElemon(props:getElProps) {
-  let res=props.res;
-  let setelemons=props.setelemons;
-  
-  res.elemon=null;
-  let tempRes = await axios.get("https://app-api.elemon.io/elemon/info/"+res.tokenId).catch(err=>{
-    // console.log(err)
-  })
-  // console.log(tempRes?.data)
-  if(!tempRes ||!tempRes.data || tempRes.status!==200 ){
-    setelemons(prev => [...prev,res]);
-   
-    // els[res.tokenId] = res;
-    return
-  } 
-  let el:defaultResponse = tempRes.data
-  if(!el || !el?.data.data.length ){
-    setelemons(prev => [...prev,res]);
-   
-    return
-  } 
-  let elemon:(typeof elemonTest.data) = el.data!
-  res = {...res,elemon:elemon.data[0]!,elemmonInfo:elemon.info} 
-
-  setelemons(prev => [...prev,res]);
-
-  return
-  
-}
-
-
+let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
 function Data({}: Props) {
-  const context = useContext(AppContext)
+  const context = useContext(AppContext);
+  const user = context.user;
 
-  // useEffect(() => {
-  //   let cancel = false
-    
-  //   if(!cancel){
-  //     // fetchInfo(page)
-  //     console.log("triggered",el)
-  //     setelemons(prev=>[el!,...prev])
-  //     if(el && el.tokenId && !els[el.tokenId]){
-  //       fetchInfo(page)
-  //     }
-  //     // fetchInfo(page)
-  //     console.log(els)
-  //   }
-  
-  //   // return () => {
-  //   //  cancel=true;
-  //   // }
-  // }, [isFetch])
-  
-  const [elemons, setelemons] = [context.elemons,context.setelemons];
+  const [elemons, setelemons] = [context.elemons, context.setelemons];
   // console.log(elemonType)
   const [page, setpage] = useState<number>(1);
   async function fetchInfo(page: number) {
-    setelemons([])
+    setelemons([]);
     let link = "/api/elemons?page=" + page;
     let getAuth = await axios.get(link);
-    if(!getAuth || !getAuth.data || getAuth.status!=200){
-      alert("Not authorized")
+    if (!getAuth || !getAuth.data || getAuth.status != 200) {
+      alert("Not authorized");
       return;
-    } ;
-    let newRespsonse:resType[] =[]
-    await (async ()=>{
-      for(let item of getAuth.data){
-        await getElemon({res:item,setelemons});
+    }
+    await (async () => {
+      for (let item of getAuth.data) {
+        let el = await getElemon(item);
+        setelemons((prev) => [...prev, el]);
       }
-    })()
-    // let filtered = elemons!.sort(
-    //   (a: resType, b: resType) => b.block_number - a.block_number
-    // );
-    setelemons(prev =>prev.sort((a: resType, b: resType) => b.block_number - a.block_number));
+    })();
+
+    setelemons((prev) =>
+      prev.sort((a: resType, b: resType) => b.block_number - a.block_number)
+    );
   }
   function navigate(dir = 1) {
-    
     fetchInfo(page + dir);
     setpage((prev) => prev + dir);
   }
   useEffect(() => {
     let cancel = false;
 
-    if (!cancel){
-      fetchInfo(1)
+    if (!cancel) {
+      fetchInfo(1);
     }
 
     return () => {
@@ -109,28 +61,48 @@ function Data({}: Props) {
     };
   }, []);
 
- 
-  
+  useMoralisSubscription("ElemonSales", (q) => q, [], {
+    // onCreate:data=> updateNewData(data.attributes),
+    onEnter: (data) => console.log("enterdata", data.attributes),
+    onUpdate: (data) => updateEvent(data.attributes),
+    enabled: true,
+  });
+  async function updateEvent(obj: any) {
+    // console.log("New record updateEvent", obj);
 
-  if(elemons.length===0) return <div></div>
+    if (!user || !user.PaymentStatus) return;
+    if (obj.from === contract || obj.to != contract || obj.confirmed ===false) return;
+    let checkData = savedata(obj);
+
+    if (checkData.success == false) {
+      console.log(checkData.errors);
+      return;
+    }
+    let el = await getElemon(Object.assign({}, obj));
+    setelemons((prev) => [el, ...prev]);
+    console.log("data updated");
+    const sound = document.getElementById("audio") as HTMLAudioElement;
+    sound?.play();
+  }
+
+  if (elemons.length === 0) return <div></div>;
   return (
     <div className="grid ">
-        <audio src="mixkit-confirmation-tone-2867.wav" id="audio" controls style={{display:'none'}}></audio>
-        <Buttons page={page} setpage={setpage} navigate={navigate} fetchInfo={fetchInfo}/>
-        <Table elemons={elemons}/>
-    
-  
-      
+      <audio
+        src="mixkit-confirmation-tone-2867.wav"
+        id="audio"
+        controls
+        style={{ display: "none" }}
+      ></audio>
+      <Buttons
+        page={page}
+        setpage={setpage}
+        navigate={navigate}
+        fetchInfo={fetchInfo}
+      />
+      <Table elemons={elemons} />
     </div>
   );
 }
 
-
-
-
-
-
 export default Data;
-
-
-

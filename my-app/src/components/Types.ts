@@ -32,27 +32,27 @@ export const MoralisTestObject = {
 };
 
 export const MoralisOutput = z.object({
-  log_index: z.number(),
+  // log_index: z.number().optional(),
   transaction_hash: z.string(),
-  createdAt: z.string().nullable().optional(),
-  updatedAt: z.string().nullable(),
+  // createdAt:z.date().optional() ||  z.string().nullable().optional(),
+  // updatedAt:z.date().optional()||  z.string().nullable(),
   address: z.string(),
-  block_hash: z.string(),
+  // block_hash: z.string().optional(),
   block_number: z.number(),
-  block_timestamp: z.object({
+  block_timestamp: z.date() ||z.object({
     __type: z.string(),
     iso: z.string(),
-  }),
+  })  ,
   confirmed: z.boolean(),
   from: z.string(),
   to: z.string(),
   tokenId: z.string() || z.number(),
-  tokenId_decimal: z.object({
-    __type: z.string(),
-    value: z.string(),
-  }),
-  transaction_index: z.number(),
-  objectId: z.string(),
+  // tokenId_decimal: z.object({
+  //   __type: z.string().optional(),
+  //   value: z.string().optional(),
+  // }).optional(),
+  // transaction_index: z.number().optional(),
+  // objectId: z.string().optional(),
 });
 
 export function savedata(rawData:any){
@@ -137,3 +137,9 @@ export interface resType extends MoralisObjectType {
   elemon: elemonType | null;
   elemmonInfo: elemmonInfoType | null;
 }
+
+// let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
+// type getElProps = {
+//   res:resType,
+//   setelemons:React.Dispatch<React.SetStateAction<resType[]>> 
+// }
