@@ -13,18 +13,18 @@ export default function Component() {
   return (
     <div className="flex-col w-full  items-start justify-start text-center text-2xl my-4 gap-4">
       <div className="my-8 text-left">
-        Signed in as {session?.user?.name} <br />
-        Email {session?.user?.email} <br />
+         {session?.user?.name?.toUpperCase()} <br />
+         {session?.user?.email} <br />
       </div>
 
-      <div className="justify-start flex">
-        <button className="btn" onClick={() => signOut()}>
+      <div className="justify-center flex">
+        <button className="btn  w-60" onClick={() => signOut()}>
           Sign out
         </button>
       </div>
       {user && user.isAdmin && (
-        <div className="justify-start flex my-4">
-          <button className="btn" onClick={() => Router.push("/Admin")}>
+        <div className="justify-center flex my-4">
+          <button className="btn w-60" onClick={() => Router.push("/Admin")}>
             Admin
           </button>
         </div>

@@ -9,12 +9,12 @@ function MainItems(props:any) {
   // const mySocket = context.ioSocket!
 
   return (
-    <div className="grid grid-cols-1-5 ">
+    <div className="flex ">
       <div className=" Left-items  border-r-2 border-spacing-1 border-indigo-300 px-4">
        
         <SignIn />
       </div>
-      <div className="Right-items  h-screen">
+      <div className="Right-items flex justify-center w-full  h-full">
         <Data />
         {/* <button onClick={()=>{
           console.log("clicked")
