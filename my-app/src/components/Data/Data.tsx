@@ -68,7 +68,7 @@ function Data({}: Props) {
     enabled: true,
   });
   async function updateEvent(obj: any) {
-    console.log("New record updateEvent", obj);
+    // console.log("New record updateEvent", obj);
 
     if (!user || !user.PaymentStatus) return;
     if (obj.from === contract || obj.to != contract || obj.confirmed ===false) return;
