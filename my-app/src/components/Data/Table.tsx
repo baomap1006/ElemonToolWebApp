@@ -12,7 +12,8 @@ import { elemonNames, ElClass, Aura, Rare } from "./info";
 type Props = {
   elemons: resType[];
 };
-
+import { imageString } from "./Functions";
+import Image from "next/image";
 function Table({ elemons }: Props) {
   return (
     <div className="flex justify-center justify-items-center w-full">
@@ -41,14 +42,27 @@ function Table({ elemons }: Props) {
 
               let timeString =
                 timeSince(elemon.block_timestamp.toString()) + " ago";
+              let info = elemon.elemmonInfo!;
+              let str = imageString(info);
               return (
                 <tr
                   key={elemon.transaction_hash}
                   className="table-row gap-2 w-full hover:bg-indigo-100 odd:bg-white even: bg-slate-100"
                 >
                   <td className="table-cell">{elemon.tokenId}</td>
-                  <td className="table-cell">{timeString}</td>
-                  <ElemonInfo data={elemon} />
+                  <td className="table-cell">
+                    <div>{timeString}</div>
+                    {info && (
+                      <Image
+                        layout="responsive"
+                        width={"100px"}
+                        height={"100px"}
+                        src={str}
+                        alt={info ? elemonNames[info.baseCardId + "a"] : ""}
+                      />
+                    )}
+                  </td>
+                  {info && <ElemonInfo data={elemon} />}
                   <td className="table-cell ">
                     <a
                       className="btn overflow-hidden text-ellipsis whitespace-nowrap w-60 inline-block  "
@@ -70,12 +84,16 @@ function Table({ elemons }: Props) {
 }
 
 function Item({ children }: { children: React.ReactNode }) {
-  return <div className="xl:grid grid-cols-3 flex gap-4 justify-start flex-wrap">{children}</div>;
+  return (
+    <div className="xl:grid grid-cols-3 flex gap-4 justify-start flex-wrap">
+      {children}
+    </div>
+  );
 }
 
 function Comp({ title, value }: { [key: string]: string | number | null }) {
   return (
-    <div className=" border-b-2 border-b-indigo-200">{`${title} : ${value}`}</div>
+    <div className=" border-b-2 border-b-indigo-200">{`${title} ${value}`}</div>
   );
 }
 
@@ -88,17 +106,24 @@ function ElemonInfo({ data }: { data: resType }) {
   return (
     <td className="table-cell">
       <Item>
-        <Comp title="Pet" value={elemonNames[info.baseCardId + "a"]!} />
+        <Comp title="" value={elemonNames[info.baseCardId + "a"]!} />
       </Item>
 
       <Item>
-        <Comp title="Class" value={ElClass[info.class - 1]?.name || ""} />
-        <Comp title="Rarity" value={Rare[info.rarity - 1]?.name || ""} />
+        <Comp title="" value={ElClass[info.class - 1]?.name || ""} />
+        <Comp title="" value={Rare[info.rarity - 1]?.name || ""} />
+
+        {/* <Image src={info ? `https://app.elemon.io/images/rarity/big/${Rare[info.rarity - 1]?.name}.png`:""} layout="responsive"
+          width={"10"}
+          height={"10"}
+          
+          alt={info?Rare[info.rarity - 1]?.name:""} />
+         */}
       </Item>
 
       <Item>
         <Comp
-          title="Price"
+          title=""
           value={
             parseInt(info.marketPrice) / 10 ** 18 +
             " " +
@@ -106,6 +131,8 @@ function ElemonInfo({ data }: { data: resType }) {
           }
         />
         <Comp title="Power" value={elemon.point} />
+      </Item>
+      <Item>
         <Comp
           title="Power/USD"
           value={(
@@ -114,7 +141,6 @@ function ElemonInfo({ data }: { data: resType }) {
           ).toFixed(2)}
         />
       </Item>
-
       <Item>
         <Comp title="Level" value={elemon.level} />
       </Item>

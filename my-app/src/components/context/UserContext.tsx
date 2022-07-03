@@ -53,85 +53,34 @@ export function AppWrapper({ children }: ChildProps) {
     };
   }, [session]);
 
-  async function getElemon(res: resType) {
-    // if (elemons[res.tokenId]) return;
-    res.elemon = null;
-    res.block_timestamp.iso = new Date(res.block_timestamp.iso).toString();
-    // elemons[res.tokenId]="1";
-    let tempRes = await axios
-      .get("https://app-api.elemon.io/elemon/info/" + res.tokenId)
-      .catch((err) => {
-        console.log(err);
-      });
-    // console.log(tempRes?.data)
-    if (!tempRes || !tempRes.data || tempRes.status !== 200) {
-      // settempElemon(res);
-      // elemons[res.tokenId] = res;
-      return;
-    }
-    let el: defaultResponse = tempRes.data;
-    if (!el || !el?.data.data.length) {
-      settempElemon(res);
-      // elemons[res.tokenId] = res;
-      return;
-    }
-    let elemon: typeof elemonTest.data = el.data!;
-    res = { ...res, elemon: elemon.data[0]!, elemmonInfo: elemon.info };
+  
+  // let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
+  // useEffect(() => {
+  //   let cancel = false;
+  //   const socket = io("https://ElemonWS.baotran17.repl.co");
+  //   setioSocket(socket);
+  //   if (!cancel && status === "authenticated") {
+ 
+  //   }
 
-    settempElemon(res);
-    // elemons[res.tokenId] = res;
-    return;
-  }
-  let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
-  useEffect(() => {
-    let cancel = false;
-    const socket = io("https://ElemonWS.baotran17.repl.co");
-    setioSocket(socket);
-    if (!cancel && status === "authenticated") {
-      // socket.on("connect", () => {
-      //   console.log(socket.id, " connected to the server !");
-      //   socket.on("received-item", async (context) => {
-      //     console.log("received event",context);
-      //     // if(elemons[context.tokenId]) return;
-      //     let checkdata = savedata(context);
-      //     if (checkdata.success == false) {
-      //       console.log(checkdata.errors);
-      //       return;
-      //     }
-      //     if (
-      //       checkdata?.data?.from == contract ||
-      //       checkdata?.data?.to != contract
-      //     ) {
-      //       console.log("Not listing order");
-      //       return;
-      //     }
-      //     console.log(checkdata)
-      //     // await getElemon(context);
-      //     settempElemon(context)
-      //     setisFetch(!isFetch);
-      //     // fetchInfo(page)
-      //   });
-      // });
-    }
+  //   return () => {
+  //     socket.close();
+  //   };
+  // }, [status]);
+  // useEffect(() => {
+  //   ioSocket?.on("received-item", async (context) => {
+  //     console.log("received event", context);
+  //     context.block_timestamp = context.block_timestamp.iso
+  //     setelemons(prev => [context,...prev])
+  //     const video = document.getElementById('audio') as HTMLAudioElement
+  //     video?.play();
+  //   });
+  //   return () => {
+  //     ioSocket?.off("received-item");
+  //   };
+  // }, [ioSocket]);
 
-    return () => {
-      socket.close();
-    };
-  }, [status]);
-  useEffect(() => {
-    ioSocket?.on("received-item", async (context) => {
-      console.log("received event", context);
-      context.block_timestamp = context.block_timestamp.iso
-      setelemons(prev => [context,...prev])
-      const video = document.getElementById('audio') as HTMLAudioElement
-      video?.play();
-    });
-    return () => {
-      ioSocket?.off("received-item");
-    };
-  }, [ioSocket]);
-
-  ioSocket;
+  
 
   return (
     <AppContext.Provider
