@@ -87,7 +87,7 @@ function Data({}: Props) {
 
   if (elemons.length === 0) return <div></div>;
   return (
-    <div className="grid ">
+    <div className="grid overflow-auto">
       <audio
         src="mixkit-confirmation-tone-2867.wav"
         id="audio"

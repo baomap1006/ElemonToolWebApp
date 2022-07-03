@@ -8,6 +8,7 @@
   min-w-4: 1rem;
   min-w-400: 400px;
   
+  
 }
 
 @layer components {
@@ -20,10 +21,13 @@
   .border-all {
     @apply border-2 border-indigo-500;
   }
+  /* .table-cell {
+    @apply p-4 text-left    text-ellipsis whitespace-nowrap  inline-block sm:block sm:w-full sm:text-right sm:relative sm:pl-[50%];
+  } */
   .table-cell {
-    @apply p-4 text-left   overflow-hidden text-ellipsis whitespace-nowrap w-60 inline-block;
+    @apply sm:text-right sm:pr-[4px] p-4
+    /* before:content-[attribute(data-label)] before:absolute before:left-0 before:w-1/2 */
   }
-  
 }
 
 * {

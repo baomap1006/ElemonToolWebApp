@@ -9,8 +9,8 @@ function MainItems(props:any) {
   // const mySocket = context.ioSocket!
 
   return (
-    <div className="flex ">
-      <div className=" Left-items  border-r-2 border-spacing-1 border-indigo-300 px-4">
+    <div className="sm:flex-col flex w-full">
+      <div className=" Left-items sm:w-screen sm:border-none  border-r-2 border-spacing-1 border-indigo-300 px-4">
        
         <SignIn />
       </div>
