@@ -2,14 +2,14 @@ import React, { useState, useEffect,useContext } from "react";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import firebase from "firebase/compat/app";
 import { uiConfig } from "./Firebase";
-import {AppContext} from '../../context/UserContext'
+import {useAppContext} from '../../context/UserContext'
 interface ChildProps {
   children?: React.ReactNode | React.ReactNode[]; 
 }
 
 function SignInScreen({ children }: ChildProps) {
   const [isSignedIn, setIsSignedIn] = useState(false); // Local signed-in state.
-  const myContext = useContext(AppContext)
+  const myContext = useAppContext()!
 
   // Listen to the Firebase Auth state and set the local state.
   useEffect(() => {

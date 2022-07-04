@@ -11,7 +11,7 @@ import {
   savedata,
 } from "../Types";
 import Table from "./Table";
-import { AppContext } from "../context/UserContext";
+import { useAppContext } from "../context/UserContext";
 import { useMoralisSubscription } from "react-moralis";
 import { getElemon } from "./Functions";
 
@@ -20,7 +20,7 @@ type Props = {
 };
 let contract = "0xdc8dbca78a5da4f29ca4572dc4734c0048d61c2f";
 function Data({}: Props) {
-  const context = useContext(AppContext);
+  const context = useAppContext()!;
   const user = context.user;
 
   const [elemons, setelemons] = [context.elemons, context.setelemons];

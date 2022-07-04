@@ -1,12 +1,12 @@
 import { useSession, signOut } from "next-auth/react";
 import Router from "next/router";
-import { AppContext } from "./context/UserContext";
+import { useAppContext } from "./context/UserContext";
 import { useContext } from "react";
 export default function Component() {
   const { data: session, status } = useSession();
   // console.log(session)
   // console.log(process.env.NEXT_PUBLIC_DISCORD_ID)
-  const user = useContext(AppContext).user!;
+  const user = useAppContext()!.user!;
 
   if (status == "loading") return <div>Loading...</div>;
 

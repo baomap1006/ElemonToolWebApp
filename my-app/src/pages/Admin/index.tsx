@@ -1,6 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import { AppContext } from "../../components/context/UserContext";
+import { useAppContext } from "../../components/context/UserContext";
 import { useContext } from "react";
 type Props = {};
 import axios from "axios";
@@ -9,7 +9,7 @@ import { User } from "@prisma/client";
 
 
 function Admin({}: Props) {
-  const user = useContext(AppContext).user!;
+  const user = useAppContext()?.user!;
   const [users, setusers] = useState<User[]>();
   async function getusers(){
     return axios.get("/api/myusers").then((res) => {
